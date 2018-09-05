@@ -1,4 +1,4 @@
-import {FILTER_BY_GENRE, FILTER_BY_ACTOR, FILTER_BY_DIRECTOR} from '../actions/actionTypes';
+import {FILTER_BY_GENRE, FILTER_BY_ACTOR, FILTER_BY_DIRECTOR, RESET_FILTER} from '../actions/actionTypes';
 
 const initialState = {
 	genre: undefined,
@@ -14,6 +14,8 @@ const filter = (state = initialState, action) => {
 			return {...state, ...initialState, director: action.data};
 		case FILTER_BY_GENRE:
 			return {...state, ...initialState, genre: action.data};
+		case RESET_FILTER:
+			return {...state, ...initialState};
 		default:
 			return state;
 	}
