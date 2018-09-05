@@ -18,7 +18,7 @@ class App extends Component {
 				<Route exact path='/director/:director' render={({match}) =>
 					<MovieList director={match.params.director}/>
 				}/>
-				<Route path='/' render={() =>
+				<Route exact path='/' render={() =>
 					<MovieList/>
 				}/>
 			</div>

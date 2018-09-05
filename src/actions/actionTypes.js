@@ -1,0 +1,5 @@
+export const FETCH_MOVIES = 'FETCH_MOVIES';
+
+export const FILTER_BY_DIRECTOR = 'FILTER_BY_DIRECTOR';
+export const FILTER_BY_GENRE = 'FILTER_BY_GENRE';
+export const FILTER_BY_ACTOR = 'FILTER_BY_ACTOR';
