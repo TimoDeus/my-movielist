@@ -17,16 +17,9 @@ class MovieList extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const {filter} = nextProps;
-		if (filter.director) {
-			this.setState({results: filterByKey(nextProps, 'Director', filter.director)});
-		} else if (filter.actor) {
-			this.setState({results: filterByKey(nextProps, 'Actors', filter.actor)})
-		} else if (filter.genre) {
-			this.setState({results: filterByKey(nextProps, 'Genre', filter.genre)})
-		} else {
-			this.setState({results: nextProps.movies.data});
-		}
+		const filtered = applyFilter(nextProps);
+		const sorted = sortResults(filtered, 'imdbRating', false);
+		this.setState({results: sorted});
 	}
 
 	render() {
@@ -63,6 +56,25 @@ const filterByKey = (props, key, value) => {
 	const {movies} = props;
 	return movies.data.filter(e => e[key].match(value))
 };
+
+const applyFilter = props => {
+	const {filter} = props;
+	if (filter.director) {
+		return filterByKey(props, 'Director', filter.director);
+	} else if (filter.actor) {
+		return filterByKey(props, 'Actors', filter.actor);
+	} else if (filter.genre) {
+		return filterByKey(props, 'Genre', filter.genre);
+	} else {
+		return props.movies.data;
+	}
+};
+
+const sortResults = (results, keyToSort, asc = true) =>
+	results.slice().sort((a, b) => {
+		const res = a[keyToSort] > b[keyToSort] ? 1 : (a[keyToSort] < b[keyToSort] ? -1 : 0);
+		return !asc ? res * -1 : res;
+	});
 
 const mapDispatchToProps = dispatch => ({
 	fetchMoviesIfNeeded: () => dispatch(fetchMoviesIfNeeded())
