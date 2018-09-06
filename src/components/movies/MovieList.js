@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import {fetchMoviesIfNeeded} from '../../actions/movies';
 import * as PropTypes from 'prop-types';
 
+const PREVIEW_SIZE = 10;
+
 class MovieList extends Component {
 
 	constructor() {
@@ -26,7 +28,7 @@ class MovieList extends Component {
 		const {filter, movies} = this.props;
 		const {showAll} = this.state;
 		const totalSize = movies.length;
-		const moviesToDisplay = showAll ? movies : movies.slice(0, 10);
+		const moviesToDisplay = showAll ? movies : movies.slice(0, PREVIEW_SIZE);
 		return (
 			<Container text>
 				{moviesToDisplay && (
@@ -35,7 +37,7 @@ class MovieList extends Component {
 						<Card.Group>
 							{moviesToDisplay.map(movie => <MovieCard key={movie.imdbID} movie={movie}/>)}
 						</Card.Group>
-						{!showAll && (
+						{!showAll && totalSize > PREVIEW_SIZE && (
 							<div>
 								<Divider/>
 								<Button content='Mehr anzeigen' basic fluid onClick={() => this.setState({showAll: true})}/>
