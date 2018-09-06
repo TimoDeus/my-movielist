@@ -2,7 +2,7 @@ import React from 'react'
 import {Button, Container, Image, Input, Menu,} from 'semantic-ui-react'
 import logo from '../../logo.svg';
 import {connect} from 'react-redux';
-import {resetFilter} from '../../actions/filter';
+import {filterByFreetext, resetFilter} from '../../actions/filter';
 import * as PropTypes from 'prop-types';
 import {setSortOrder} from '../../actions/sort';
 
@@ -22,7 +22,7 @@ const Header = props => {
 				</Menu.Item>
 				<Menu.Menu position='right'>
 					<Menu.Item>
-						<Input icon='search' placeholder='Suche...'/>
+						<Input icon='search' placeholder='Suche...' onChange={props.onSearch}/>
 					</Menu.Item>
 				</Menu.Menu>
 			</Menu>
@@ -46,6 +46,7 @@ const Header = props => {
 const mapDispatchToProps = dispatch => ({
 	onResetFilter: () => dispatch(resetFilter()),
 	onSetSorting: data => dispatch(setSortOrder(data)),
+	onSearch: e => dispatch(filterByFreetext(e.target.value.trim()))
 });
 
 const mapStateToProps = ({filter, sort}) => ({

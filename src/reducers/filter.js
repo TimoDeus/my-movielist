@@ -1,9 +1,10 @@
-import {FILTER_BY_GENRE, FILTER_BY_ACTOR, FILTER_BY_DIRECTOR, RESET_FILTER} from '../actions/actionTypes';
+import {FILTER_BY_ACTOR, FILTER_BY_DIRECTOR, FILTER_BY_FREETEXT, FILTER_BY_GENRE, RESET_FILTER} from '../actions/actionTypes';
 
 const initialState = {
 	genre: undefined,
 	actor: undefined,
-	director: undefined
+	director: undefined,
+	freetext: undefined
 };
 
 const filter = (state = initialState, action) => {
@@ -14,6 +15,8 @@ const filter = (state = initialState, action) => {
 			return {...state, ...initialState, director: action.data};
 		case FILTER_BY_GENRE:
 			return {...state, ...initialState, genre: action.data};
+		case FILTER_BY_FREETEXT:
+			return {...state, ...initialState, freetext: action.data};
 		case RESET_FILTER:
 			return {...state, ...initialState};
 		default:

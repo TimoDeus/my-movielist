@@ -26,7 +26,7 @@ class MovieList extends Component {
 		const {filter, movies} = this.props;
 		const {showAll} = this.state;
 		const totalSize = movies.length;
-		const moviesToDisplay = showAll ? movies : movies.slice(0,10);
+		const moviesToDisplay = showAll ? movies : movies.slice(0, 10);
 		return (
 			<Container text>
 				{moviesToDisplay && (
@@ -38,7 +38,7 @@ class MovieList extends Component {
 						{!showAll && (
 							<div>
 								<Divider/>
-								<Button content='Mehr anzeigen' basic fluid onClick={() => this.setState({showAll: true})} />
+								<Button content='Mehr anzeigen' basic fluid onClick={() => this.setState({showAll: true})}/>
 							</div>
 						)}
 					</div>
@@ -50,18 +50,20 @@ class MovieList extends Component {
 
 const getTitleByFilter = filter => {
 	if (filter.director) {
-		return "Filme von Regisseur " + filter.director;
+		return 'Filme von Regisseur ' + filter.director;
 	} else if (filter.actor) {
-		return "Filme mit Schauspieler(in) " + filter.actor;
+		return 'Filme mit Schauspieler(in) ' + filter.actor;
 	} else if (filter.genre) {
-		return "Filme des Genres " + filter.genre;
+		return 'Filme des Genres ' + filter.genre;
+	} else if (filter.freetext && filter.freetext.length > 2) {
+		return 'Ergebnisse für Suche "' + filter.freetext + '"';
 	} else {
-		return "Alle Filme";
+		return 'Alle Filme';
 	}
 };
 
 const filterByKey = (movies, key, value) =>
-	movies.filter(e => e[key].match(value));
+	movies.filter(e => e[key].toUpperCase().match(value.toUpperCase()));
 
 const applyFilter = (allMovies, filter) => {
 	if (filter.director) {
@@ -70,6 +72,8 @@ const applyFilter = (allMovies, filter) => {
 		return filterByKey(allMovies, 'Actors', filter.actor);
 	} else if (filter.genre) {
 		return filterByKey(allMovies, 'Genre', filter.genre);
+	} else if (filter.freetext && filter.freetext.length > 2) {
+		return filterByKey(allMovies, 'Title', filter.freetext);
 	} else {
 		return allMovies;
 	}
@@ -101,7 +105,7 @@ const mapStateToProps = ({movies, filter, sort}) => ({
 });
 
 MovieList.propTypes = {
-	movies: PropTypes.object.isRequired,
+	movies: PropTypes.array.isRequired,
 	filter: PropTypes.object.isRequired,
 	fetchMoviesIfNeeded: PropTypes.func.isRequired
 };
