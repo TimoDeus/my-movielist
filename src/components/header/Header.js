@@ -4,10 +4,15 @@ import logo from '../../logo.svg';
 import {connect} from 'react-redux';
 import {resetFilter} from '../../actions/filter';
 import * as PropTypes from 'prop-types';
+import {setSortOrder} from '../../actions/sort';
 
 const Header = props => {
-	const {filter} = props;
+	const {filter, sort, onSetSorting} = props;
 	const hasFilter = filter.actor || filter.director || filter.genre;
+	const sortOptions = [
+		{name: 'Title', title: 'Titel', asc: true},
+		{name: 'imdbRating', title: 'Bewertung', asc: false}
+	];
 	return (
 		<Container>
 			<Menu inverted>
@@ -23,8 +28,9 @@ const Header = props => {
 			</Menu>
 			<Menu text>
 				<Menu.Item header>Sortieren</Menu.Item>
-				<Menu.Item name='Titel'/>
-				<Menu.Item name='Bewertung'/>
+				{sortOptions.map(data =>
+					<Menu.Item key={data.name} name={data.title} active={sort.name === data.name} onClick={() => onSetSorting(data)}/>
+				)}
 				{hasFilter && (
 					<Menu.Menu position='right'>
 						<Menu.Item>
@@ -38,16 +44,20 @@ const Header = props => {
 };
 
 const mapDispatchToProps = dispatch => ({
-	onResetFilter: () => dispatch(resetFilter())
+	onResetFilter: () => dispatch(resetFilter()),
+	onSetSorting: data => dispatch(setSortOrder(data)),
 });
 
-const mapStateToProps = ({filter}) => ({
-	filter
+const mapStateToProps = ({filter, sort}) => ({
+	filter,
+	sort
 });
 
 Header.propTypes = {
 	filter: PropTypes.object.isRequired,
+	sort: PropTypes.object.isRequired,
 	onResetFilter: PropTypes.func.isRequired,
+	onSetSorting: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -81,10 +81,10 @@ const sortResults = (results, keyToSort, asc = true) =>
 		return !asc ? res * -1 : res;
 	});
 
-const getMovies = (allMovies, filter) => {
+const getMovies = (allMovies, filter, sort) => {
 	if (allMovies && allMovies.length) {
 		const filtered = applyFilter(allMovies, filter);
-		return sortResults(filtered, 'imdbRating', false);
+		return sortResults(filtered, sort.name, sort.asc);
 	} else {
 		return [];
 	}
@@ -94,9 +94,10 @@ const mapDispatchToProps = dispatch => ({
 	fetchMoviesIfNeeded: () => dispatch(fetchMoviesIfNeeded())
 });
 
-const mapStateToProps = ({movies, filter}) => ({
-	movies: getMovies(movies.data, filter),
-	filter
+const mapStateToProps = ({movies, filter, sort}) => ({
+	movies: getMovies(movies.data, filter, sort),
+	filter,
+	sort
 });
 
 MovieList.propTypes = {
