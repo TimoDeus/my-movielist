@@ -1,6 +1,5 @@
 import React from 'react'
-import {Button, Container, Image, Input, Menu,} from 'semantic-ui-react'
-import logo from '../../logo.svg';
+import {Button, Container, Icon, Input, Menu,} from 'semantic-ui-react'
 import {connect} from 'react-redux';
 import {filterByFreetext, resetFilter} from '../../actions/filter';
 import * as PropTypes from 'prop-types';
@@ -8,7 +7,7 @@ import {setSortOrder} from '../../actions/sort';
 
 const Header = props => {
 	const {filter, sort, onSetSorting} = props;
-	const hasFilter = filter.actor || filter.director || filter.genre;
+	const hasFilter = filter.actor || filter.director || filter.genre || filter.freetext;
 	const sortOptions = [
 		{name: 'Title', title: 'Titel', asc: true},
 		{name: 'imdbRating', title: 'Bewertung', asc: false}
@@ -16,8 +15,8 @@ const Header = props => {
 	return (
 		<Container>
 			<Menu inverted>
-				<Menu.Item as='a' header>
-					<Image size='mini' src={logo} style={{marginRight: '1.5em'}}/>
+				<Menu.Item header>
+					<Icon name='film' style={{marginRight: '1.5em'}}/>
 					Filmliste
 				</Menu.Item>
 				<Menu.Menu position='right'>

@@ -24,8 +24,7 @@ class MovieCard extends Component {
 							 target='_blank'>{movie.Title}</a>
 					</Card.Header>
 					<Card.Meta>
-						{printLabels(movie.Genre, onGenreClicked)} | {movie.Year}
-						| {movie.Runtime} | <Icon name='star' color='yellow'/> {movie.imdbRating}
+						{printLabels(movie.Genre, onGenreClicked)} | {movie.Year} | {movie.Runtime} | <Icon name='star' color='yellow'/> {movie.imdbRating}
 					</Card.Meta>
 					<Card.Meta>
 						{printLabels(movie.Director, onDirectorClicked)} | {printLabels(movie.Actors, onActorClicked)}
