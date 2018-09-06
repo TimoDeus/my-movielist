@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Card, Container, Header} from 'semantic-ui-react'
+import {Button, Card, Container, Divider, Header} from 'semantic-ui-react'
 import MovieCard from './MovieCard';
 import {connect} from 'react-redux';
 import {fetchMoviesIfNeeded} from '../../actions/movies';
@@ -9,7 +9,7 @@ class MovieList extends Component {
 
 	constructor() {
 		super();
-		this.state = {results: []};
+		this.state = {showAll: false};
 	}
 
 	componentDidMount() {
@@ -17,22 +17,30 @@ class MovieList extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const filtered = applyFilter(nextProps);
-		const sorted = sortResults(filtered, 'imdbRating', false);
-		this.setState({results: sorted});
+		if (this.props.movies !== nextProps.movies) {
+			this.setState({showAll: false});
+		}
 	}
 
 	render() {
-		const {filter} = this.props;
-		const data = this.state.results;
+		const {filter, movies} = this.props;
+		const {showAll} = this.state;
+		const totalSize = movies.length;
+		const moviesToDisplay = showAll ? movies : movies.slice(0,10);
 		return (
 			<Container text>
-				{data && (
+				{moviesToDisplay && (
 					<div>
-						<Header as='h1'>{getTitleByFilter(filter)} ({data.length})</Header>
+						<Header as='h1'>{getTitleByFilter(filter)} ({totalSize})</Header>
 						<Card.Group>
-							{data.map(movie => <MovieCard key={movie.imdbID} movie={movie}/>)}
+							{moviesToDisplay.map(movie => <MovieCard key={movie.imdbID} movie={movie}/>)}
 						</Card.Group>
+						{!showAll && (
+							<div>
+								<Divider/>
+								<Button content='Mehr anzeigen' basic fluid onClick={() => this.setState({showAll: true})} />
+							</div>
+						)}
 					</div>
 				)}
 			</Container>
@@ -52,21 +60,18 @@ const getTitleByFilter = filter => {
 	}
 };
 
-const filterByKey = (props, key, value) => {
-	const {movies} = props;
-	return movies.data.filter(e => e[key].match(value))
-};
+const filterByKey = (movies, key, value) =>
+	movies.filter(e => e[key].match(value));
 
-const applyFilter = props => {
-	const {filter} = props;
+const applyFilter = (allMovies, filter) => {
 	if (filter.director) {
-		return filterByKey(props, 'Director', filter.director);
+		return filterByKey(allMovies, 'Director', filter.director);
 	} else if (filter.actor) {
-		return filterByKey(props, 'Actors', filter.actor);
+		return filterByKey(allMovies, 'Actors', filter.actor);
 	} else if (filter.genre) {
-		return filterByKey(props, 'Genre', filter.genre);
+		return filterByKey(allMovies, 'Genre', filter.genre);
 	} else {
-		return props.movies.data;
+		return allMovies;
 	}
 };
 
@@ -76,12 +81,21 @@ const sortResults = (results, keyToSort, asc = true) =>
 		return !asc ? res * -1 : res;
 	});
 
+const getMovies = (allMovies, filter) => {
+	if (allMovies && allMovies.length) {
+		const filtered = applyFilter(allMovies, filter);
+		return sortResults(filtered, 'imdbRating', false);
+	} else {
+		return [];
+	}
+};
+
 const mapDispatchToProps = dispatch => ({
 	fetchMoviesIfNeeded: () => dispatch(fetchMoviesIfNeeded())
 });
 
 const mapStateToProps = ({movies, filter}) => ({
-	movies,
+	movies: getMovies(movies.data, filter),
 	filter
 });
 
