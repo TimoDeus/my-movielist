@@ -67,6 +67,17 @@ const getTitleByFilter = filter => {
 const filterByKey = (movies, key, value) =>
 	movies.filter(e => e[key].toUpperCase().match(value.toUpperCase()));
 
+const filterByFreetext = (movies, value) => {
+	const freetext = value.toUpperCase();
+	return movies.filter(e =>
+		e['Title'].toUpperCase().match(freetext) ||
+		e['Actors'].toUpperCase().match(freetext) ||
+		e['Director'].toUpperCase().match(freetext) ||
+		e['Genre'].toUpperCase().match(freetext)
+	);
+};
+
+
 const applyFilter = (allMovies, filter) => {
 	if (filter.director) {
 		return filterByKey(allMovies, 'Director', filter.director);
@@ -75,7 +86,7 @@ const applyFilter = (allMovies, filter) => {
 	} else if (filter.genre) {
 		return filterByKey(allMovies, 'Genre', filter.genre);
 	} else if (filter.freetext && filter.freetext.length > 2) {
-		return filterByKey(allMovies, 'Title', filter.freetext);
+		return filterByFreetext(allMovies, filter.freetext);
 	} else {
 		return allMovies;
 	}
