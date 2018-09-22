@@ -68,7 +68,7 @@ const filterByKey = (movies, key, value) =>
 	movies.filter(e => e[key].toUpperCase().match(value.toUpperCase()));
 
 const filterByFreetext = (movies, value) => {
-	const freetext = value.toUpperCase();
+	const freetext = value.trim().toUpperCase();
 	return movies.filter(e =>
 		e['Title'].toUpperCase().match(freetext) ||
 		e['Actors'].toUpperCase().match(freetext) ||

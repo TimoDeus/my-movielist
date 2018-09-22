@@ -11,7 +11,7 @@ class MovieCard extends Component {
 
 	wrapSearchText(text) {
 		const {freetext} = this.props;
-		const value = freetext ? text.replace(new RegExp('(' + freetext + ')', 'gi'), '<em>$1</em>') : text;
+		const value = freetext ? text.replace(new RegExp('(' + freetext.trim() + ')', 'gi'), '<em>$1</em>') : text;
 		return {__html: value};
 	}
 

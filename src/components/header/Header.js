@@ -45,7 +45,7 @@ const Header = props => {
 const mapDispatchToProps = dispatch => ({
 	onResetFilter: () => dispatch(resetFilter()),
 	onSetSorting: data => dispatch(setSortOrder(data)),
-	onSearch: e => dispatch(filterByFreetext(e.target.value.trim()))
+	onSearch: e => dispatch(filterByFreetext(e.target.value))
 });
 
 const mapStateToProps = ({filter, sort}) => ({
@@ -58,6 +58,7 @@ Header.propTypes = {
 	sort: PropTypes.object.isRequired,
 	onResetFilter: PropTypes.func.isRequired,
 	onSetSorting: PropTypes.func.isRequired,
+	onSearch: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
