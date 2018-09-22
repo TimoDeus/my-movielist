@@ -9,13 +9,16 @@ import {logger} from 'redux-logger'
 import thunk from 'redux-thunk'
 import {BrowserRouter} from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
+import {createCookieMiddleware, initialState} from './utils/cookieMiddleware';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+
 const store = createStore(
 	reducers,
+	initialState,
 	composeEnhancers(
-		applyMiddleware(thunk, logger)
+		applyMiddleware(thunk, logger, createCookieMiddleware())
 	)
 );
 

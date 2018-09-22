@@ -6,7 +6,7 @@ import * as PropTypes from 'prop-types';
 import {setSortOrder} from '../../actions/sort';
 
 const Header = props => {
-	const {filter, sort, onSetSorting, genres, onGenreClicked, onBookmarkClicked, bookmarkCount} = props;
+	const {filter, sort, onSetSorting, genres, onGenreClicked, onBookmarkClicked, bookmarkCount, onResetFilter} = props;
 	const hasFilter = filter.actor || filter.director || filter.genre || filter.freetext || filter.bookmarksOnly;
 	const sortOptions = [
 		{name: 'Title', title: 'Titel', asc: true},
@@ -15,7 +15,7 @@ const Header = props => {
 	return (
 		<Container>
 			<Menu inverted>
-				<Menu.Item header>
+				<Menu.Item header onClick={onResetFilter}>
 					<Icon name='film' style={{marginRight: '1.5em'}}/>
 					Filmliste
 				</Menu.Item>
@@ -45,7 +45,7 @@ const Header = props => {
 				{hasFilter && (
 					<Menu.Menu position='right'>
 						<Menu.Item>
-							<Button onClick={props.onResetFilter}>Filter zurücksetzen</Button>
+							<Button onClick={onResetFilter}>Filter zurücksetzen</Button>
 						</Menu.Item>
 					</Menu.Menu>
 				)}
@@ -72,7 +72,7 @@ const mapStateToProps = ({movies, filter, sort, bookmark}) => ({
 Header.propTypes = {
 	filter: PropTypes.object.isRequired,
 	sort: PropTypes.object.isRequired,
-	genres: PropTypes.object.isRequired,
+	genres: PropTypes.array,
 	onResetFilter: PropTypes.func.isRequired,
 	onSetSorting: PropTypes.func.isRequired,
 	onGenreClicked: PropTypes.func.isRequired,
