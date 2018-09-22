@@ -21,7 +21,7 @@ const Header = props => {
 				</Menu.Item>
 				<Menu.Menu position='right'>
 					<Menu.Item>
-						<Input icon='search' placeholder='Suche...' onChange={props.onSearch}/>
+						<Input icon='search' placeholder='Suche...' onChange={props.onSearch} value={filter.freetext || ''}/>
 					</Menu.Item>
 				</Menu.Menu>
 			</Menu>
