@@ -1,3 +1,7 @@
 em {
 	background-color: yellow;
 }
+
+.icon {
+	cursor: pointer !important;
+}

@@ -31,7 +31,7 @@ class MovieCard extends Component {
 		return (
 			<Card fluid color='blue'>
 				<Card.Content>
-					<Label corner='right' onClick={isBookmarked ? removeBookmark(movie.imdbID) : addBookmark(movie.imdbID)}>
+					<Label as='a' corner='right' onClick={isBookmarked ? removeBookmark(movie.imdbID) : addBookmark(movie.imdbID)}>
 						<Icon name={isBookmarked ? 'bookmark' : 'bookmark outline'} color={isBookmarked ? 'yellow' : 'black'}/>
 					</Label>
 					<Image floated='left' size='small' src={movie.Poster}/>
