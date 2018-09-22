@@ -7,3 +7,6 @@ export const FILTER_BY_FREETEXT = 'FILTER_BY_FREETEXT';
 export const RESET_FILTER = 'RESET_FILTER';
 
 export const SET_SORT_ORDER = 'SET_SORT_ORDER';
+
+export const ADD_BOOKMARK = 'ADD_BOOKMARK';
+export const REMOVE_BOOKMARK = 'REMOVE_BOOKMARK';

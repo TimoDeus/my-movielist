@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import {Button, Card, Icon, Image} from 'semantic-ui-react'
+import {Button, Card, Icon, Image, Label} from 'semantic-ui-react'
 import * as PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import {filterByActor, filterByDirector, filterByGenre} from '../../actions/filter';
 import {connect} from 'react-redux';
 import './MovieCard.css';
+import {addBookmark, removeBookmark} from '../../actions/bookmark';
 
 
 class MovieCard extends Component {
@@ -26,10 +27,13 @@ class MovieCard extends Component {
 	}
 
 	render() {
-		const {movie, onGenreClicked, onActorClicked, onDirectorClicked} = this.props;
+		const {movie, onGenreClicked, onActorClicked, onDirectorClicked, removeBookmark, addBookmark, isBookmarked} = this.props;
 		return (
 			<Card fluid color='blue'>
 				<Card.Content>
+					<Label corner='right' onClick={isBookmarked ? removeBookmark(movie.imdbID) : addBookmark(movie.imdbID)}>
+						<Icon name={isBookmarked ? 'bookmark' : 'bookmark outline'} color={isBookmarked ? 'yellow' : 'black'}/>
+					</Label>
 					<Image floated='left' size='small' src={movie.Poster}/>
 					<Card.Header>
 						<a
@@ -53,11 +57,14 @@ class MovieCard extends Component {
 const mapDispatchToProps = dispatch => ({
 	onGenreClicked: value => dispatch(filterByGenre(value)),
 	onActorClicked: value => dispatch(filterByActor(value)),
-	onDirectorClicked: value => dispatch(filterByDirector(value))
+	onDirectorClicked: value => dispatch(filterByDirector(value)),
+	addBookmark: value => () => dispatch(addBookmark(value)),
+	removeBookmark: value => () => dispatch(removeBookmark(value))
 });
 
-const mapStateToProps = ({filter}) => ({
-	freetext: filter.freetext
+const mapStateToProps = ({filter, bookmark}, ownProps) => ({
+	freetext: filter.freetext,
+	isBookmarked: bookmark.bookmarks.includes(ownProps.movie.imdbID)
 });
 
 MovieCard.propTypes = {
@@ -66,7 +73,10 @@ MovieCard.propTypes = {
 	onActorClicked: PropTypes.func.isRequired,
 	onGenreClicked: PropTypes.func.isRequired,
 	onDirectorClicked: PropTypes.func.isRequired,
+	addBookmark: PropTypes.func.isRequired,
+	removeBookmark: PropTypes.func.isRequired,
 	freetext: PropTypes.string,
+	isBookmarked: PropTypes.bool,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MovieCard));
