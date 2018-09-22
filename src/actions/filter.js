@@ -1,5 +1,6 @@
-import {FILTER_BY_ACTOR, FILTER_BY_DIRECTOR, FILTER_BY_GENRE, FILTER_BY_FREETEXT, RESET_FILTER} from './actionTypes';
+import {FILTER_BY_ACTOR, FILTER_BY_DIRECTOR, FILTER_BY_GENRE, FILTER_BY_FREETEXT, RESET_FILTER, FILTER_BY_BOOKMARKS} from './actionTypes';
 
+export const filterByBookmarks = () => dispatch => dispatch({type: FILTER_BY_BOOKMARKS});
 export const filterByDirector = data => dispatch => dispatch({type: FILTER_BY_DIRECTOR, data});
 export const filterByActor = data => dispatch => dispatch({type: FILTER_BY_ACTOR, data});
 export const filterByGenre = data => dispatch => dispatch({type: FILTER_BY_GENRE, data});

@@ -51,7 +51,9 @@ class MovieList extends Component {
 }
 
 const getTitleByFilter = filter => {
-	if (filter.director) {
+	if (filter.bookmarksOnly) {
+		return 'Merkliste';
+	} else if (filter.director) {
 		return 'Filme von Regisseur ' + filter.director;
 	} else if (filter.actor) {
 		return 'Filme mit Schauspieler(in) ' + filter.actor;
@@ -63,6 +65,9 @@ const getTitleByFilter = filter => {
 		return 'Alle Filme';
 	}
 };
+
+const filterByBookmarks = (movies, bookmarks) =>
+	movies.filter(e => bookmarks.includes(e.imdbID));
 
 const filterByKey = (movies, key, value) =>
 	movies.filter(e => e[key].toUpperCase().match(value.toUpperCase()));
@@ -78,8 +83,10 @@ const filterByFreetext = (movies, value) => {
 };
 
 
-const applyFilter = (allMovies, filter) => {
-	if (filter.director) {
+const applyFilter = (allMovies, filter, bookmarks) => {
+	if (filter.bookmarksOnly) {
+		return filterByBookmarks(allMovies, bookmarks)
+	} else if (filter.director) {
 		return filterByKey(allMovies, 'Director', filter.director);
 	} else if (filter.actor) {
 		return filterByKey(allMovies, 'Actors', filter.actor);
@@ -98,9 +105,9 @@ const sortResults = (results, keyToSort, asc = true) =>
 		return !asc ? res * -1 : res;
 	});
 
-const getMovies = (allMovies, filter, sort) => {
+const getMovies = (allMovies, filter, sort, bookmarks) => {
 	if (allMovies && allMovies.length) {
-		const filtered = applyFilter(allMovies, filter);
+		const filtered = applyFilter(allMovies, filter, bookmarks);
 		return sortResults(filtered, sort.name, sort.asc);
 	} else {
 		return [];
@@ -111,8 +118,8 @@ const mapDispatchToProps = dispatch => ({
 	fetchMoviesIfNeeded: () => dispatch(fetchMoviesIfNeeded())
 });
 
-const mapStateToProps = ({movies, filter, sort}) => ({
-	movies: getMovies(movies.data, filter, sort),
+const mapStateToProps = ({movies, filter, sort, bookmark}) => ({
+	movies: getMovies(movies.data, filter, sort, bookmark.bookmarks),
 	filter,
 	sort
 });

@@ -1,13 +1,13 @@
 import React from 'react'
-import {Button, Container, Icon, Input, Menu, Dropdown} from 'semantic-ui-react'
+import {Button, Container, Dropdown, Icon, Input, Menu} from 'semantic-ui-react'
 import {connect} from 'react-redux';
-import {filterByFreetext, filterByGenre, resetFilter} from '../../actions/filter';
+import {filterByBookmarks, filterByFreetext, filterByGenre, resetFilter} from '../../actions/filter';
 import * as PropTypes from 'prop-types';
 import {setSortOrder} from '../../actions/sort';
 
 const Header = props => {
-	const {filter, sort, onSetSorting, genres, onGenreClicked} = props;
-	const hasFilter = filter.actor || filter.director || filter.genre || filter.freetext;
+	const {filter, sort, onSetSorting, genres, onGenreClicked, onBookmarkClicked, bookmarkCount} = props;
+	const hasFilter = filter.actor || filter.director || filter.genre || filter.freetext || filter.bookmarksOnly;
 	const sortOptions = [
 		{name: 'Title', title: 'Titel', asc: true},
 		{name: 'imdbRating', title: 'Bewertung', asc: false}
@@ -21,10 +21,14 @@ const Header = props => {
 				</Menu.Item>
 				{genres && <Dropdown scrolling item text='Genres'>
 					<Dropdown.Menu>
-						{genres.sort().map(genre => <Dropdown.Item key={genre} onClick={() => onGenreClicked(genre)}>{genre}</Dropdown.Item>)}
+						{genres.sort().map(genre =>
+							<Dropdown.Item key={genre} onClick={() => onGenreClicked(genre)}>{genre}</Dropdown.Item>)}
 					</Dropdown.Menu>
 				</Dropdown>
 				}
+				<Menu.Item onClick={onBookmarkClicked}>
+					Merkliste {bookmarkCount ? `(${bookmarkCount})` : ''}
+				</Menu.Item>
 				<Menu.Menu position='right'>
 					<Menu.Item>
 						<Input icon='search' placeholder='Suche...' onChange={props.onSearch} value={filter.freetext || ''}/>
@@ -54,13 +58,15 @@ const mapDispatchToProps = dispatch => ({
 	onResetFilter: () => dispatch(resetFilter()),
 	onSetSorting: data => dispatch(setSortOrder(data)),
 	onSearch: e => dispatch(filterByFreetext(e.target.value)),
-	onGenreClicked: genre => dispatch(filterByGenre(genre))
+	onGenreClicked: genre => dispatch(filterByGenre(genre)),
+	onBookmarkClicked: () => dispatch(filterByBookmarks()),
 });
 
-const mapStateToProps = ({movies, filter, sort}) => ({
+const mapStateToProps = ({movies, filter, sort, bookmark}) => ({
 	filter,
 	sort,
-	genres: movies.genres
+	genres: movies.genres,
+	bookmarkCount: bookmark.bookmarks.length
 });
 
 Header.propTypes = {
@@ -70,7 +76,9 @@ Header.propTypes = {
 	onResetFilter: PropTypes.func.isRequired,
 	onSetSorting: PropTypes.func.isRequired,
 	onGenreClicked: PropTypes.func.isRequired,
+	onBookmarkClicked: PropTypes.func.isRequired,
 	onSearch: PropTypes.func.isRequired,
+	bookmarkCount: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
