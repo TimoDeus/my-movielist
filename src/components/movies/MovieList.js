@@ -19,7 +19,7 @@ class MovieList extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.movies !== nextProps.movies) {
+		if (this.props.movies.length !== nextProps.movies.length) {
 			this.setState({showAll: false});
 		}
 	}
