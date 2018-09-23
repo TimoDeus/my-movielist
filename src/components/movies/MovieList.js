@@ -4,6 +4,7 @@ import MovieCard from './MovieCard';
 import {connect} from 'react-redux';
 import {fetchMoviesIfNeeded} from '../../actions/movies';
 import * as PropTypes from 'prop-types';
+import {scrollToTop} from '../../utils/scrolling';
 
 const PREVIEW_SIZE = 10;
 
@@ -21,6 +22,7 @@ class MovieList extends Component {
 	componentWillReceiveProps(nextProps) {
 		if (this.props.movies.length !== nextProps.movies.length) {
 			this.setState({showAll: false});
+			scrollToTop();
 		}
 	}
 
