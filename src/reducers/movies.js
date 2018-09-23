@@ -1,9 +1,18 @@
 import {FETCH_MOVIES} from '../actions/actionTypes';
+import 'core-js';
 
 const initialState = {data: []};
 
+const flatten = arr => arr.reduce((flat, toFlatten) => flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten), []);
+
+const getGenres = data => {
+	const arrays = data.map(item => item.Genre.split(', '));
+	const flat = flatten(arrays);
+	return new Set(flat);
+};
+
 const processData = ({data}) => ({
-	genres: [...new Set(data.map(item => item.Genre.split(', ')).flat())],
+	genres: [...getGenres(data)],
 	data
 });
 
