@@ -1,5 +1,4 @@
 import {FETCH_MOVIES} from '../actions/actionTypes';
-import 'core-js';
 
 const initialState = {data: []};
 
